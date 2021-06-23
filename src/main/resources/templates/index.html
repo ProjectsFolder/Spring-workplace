@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p>Get your greeting <a href="/test/namex/namey">here</a></p>
+<!--<a th:href="${#mvc.url('user#list').build()}">Users</a>-->
+<a th:href="${#mvc.url('test').arg(0, 'name1').arg(1, 'name2').arg(2, 'test').build()}">Test</a>
+<!--<a th:href="${#mvc.url('test').buildAndExpand('name1', 'name2', 'test')}">Test</a>-->
+<a th:href="${#mvc.url('test2').build()}">Test</a>
+<span th:text="${@testUtils.reverseString('hello')}"></span>
+</body>
+</html>
