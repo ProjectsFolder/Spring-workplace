@@ -14,11 +14,11 @@ import javax.validation.constraints.Size;
         groups = {OnCreate.class, OnUpdate.class}
 )
 public class UserDto {
-    @UniqueField(entity = User.class, field = "username", groups = OnCreate.class)
-    @Size(min=5, message = "Не меньше 5 знаков", groups = {OnCreate.class, OnUpdate.class})
+    @UniqueField(entity = User.class, field = "username", message = "Логин уже используется", groups = OnCreate.class)
+    @Size(min = 5, message = "Не меньше 5 знаков", groups = {OnCreate.class, OnUpdate.class})
     private String username;
 
-    @Size(min=5, message = "Не меньше 5 знаков", groups = {OnCreate.class, OnUpdate.class})
+    @Size(min = 5, message = "Не меньше 5 знаков", groups = {OnCreate.class, OnUpdate.class})
     private String password;
 
     private String passwordConfirm;

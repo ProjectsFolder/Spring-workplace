@@ -29,8 +29,8 @@ public class SchedulingConfig implements SchedulingConfigurer {
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.setScheduler(taskExecutor());
-        Map<String, AbstractTask> tasks = this.context.getBeansOfType(AbstractTask.class);
-        for (AbstractTask task : tasks.values()) {
+        var tasks = this.context.getBeansOfType(AbstractTask.class);
+        for (var task : tasks.values()) {
             taskRegistrar.addTriggerTask(
                     task,
                     context -> {

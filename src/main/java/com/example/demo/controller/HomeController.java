@@ -36,7 +36,7 @@ public class HomeController {
 
     @GetMapping(value = "/", name = "index")
     public String index() {
-        return "index";
+        return "test/index";
     }
 
     @GetMapping(value = "/test/{name2}/{name1}", name = "test")
@@ -50,20 +50,20 @@ public class HomeController {
         model.addAttribute("name2", name2);
         model.addAttribute("value", value);
         model.addAttribute("configValue", this.environment.getProperty("app.test"));
-        return "test";
+        return "test/test";
     }
 
     @Secured("ROLE_USER")
     @GetMapping(value = "/test2", name = "test2")
     public String test2(Model model) {
-        String name1 = request.getParameter("name1");
-        String name2 = request.getParameter("name2");
-        String value = request.getParameter("value");
+        var name1 = request.getParameter("name1");
+        var name2 = request.getParameter("name2");
+        var value = request.getParameter("value");
         model.addAttribute("name1", name1);
         model.addAttribute("name2", name2);
         model.addAttribute("value", value);
         model.addAttribute("configValue", this.environment.getProperty("app.test"));
-        return "test";
+        return "test/test";
     }
 
     @Secured("ROLE_ADMIN")

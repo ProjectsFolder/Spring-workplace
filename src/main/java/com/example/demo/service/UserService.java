@@ -16,7 +16,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -34,7 +33,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        var user = userRepository.findByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
@@ -44,7 +43,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User findUserById(Long userId) {
-        Optional<User> userFromDb = userRepository.findById(userId);
+        var userFromDb = userRepository.findById(userId);
 
         return userFromDb.orElse(new User());
     }
@@ -54,13 +53,13 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean saveUser(UserDto userForm) {
-        User userFromDB = userRepository.findByUsername(userForm.getUsername());
+        var userFromDB = userRepository.findByUsername(userForm.getUsername());
 
         if (userFromDB != null) {
             return false;
         }
 
-        User user = new User();
+        var user = new User();
         user.setUsername(userForm.getUsername());
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));

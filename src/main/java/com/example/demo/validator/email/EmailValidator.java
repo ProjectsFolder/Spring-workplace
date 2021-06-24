@@ -23,8 +23,8 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
             return false;
         }
 
-        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
-        Matcher matcher = pattern.matcher(email);
+        var pattern = Pattern.compile(EMAIL_PATTERN);
+        var matcher = pattern.matcher(email);
         return matcher.matches();
     }
 }

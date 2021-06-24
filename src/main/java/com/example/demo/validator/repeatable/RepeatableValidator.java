@@ -17,21 +17,21 @@ public class RepeatableValidator implements ConstraintValidator<Repeatable, Obje
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
-        String[] getters = Arrays.stream(fields)
+        var getters = Arrays.stream(fields)
                 .map(e -> "get" + e.substring(0, 1).toUpperCase(Locale.ROOT) + e.substring(1))
                 .toArray(String[]::new);
 
-        HashMap<String, Method> entityGetters = new HashMap<>();
-        Method[] methods = obj.getClass().getMethods();
+        var entityGetters = new HashMap<String, Method>();
+        var methods = obj.getClass().getMethods();
         for (Method method : methods) {
             entityGetters.put(method.getName(), method);
         }
 
-        String value = "";
-        for (String getter : getters) {
+        var value = "";
+        for (var getter : getters) {
             if (entityGetters.containsKey(getter)) {
                 try {
-                    String newValue = entityGetters.get(getter).invoke(obj).toString();
+                    var newValue = entityGetters.get(getter).invoke(obj).toString();
                     if (value.isEmpty()) {
                         value = newValue;
                     } else if (!newValue.equals(value)) {

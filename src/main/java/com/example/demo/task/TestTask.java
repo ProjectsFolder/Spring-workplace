@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 
 @Component
 public class TestTask extends AbstractTask {
@@ -21,10 +20,11 @@ public class TestTask extends AbstractTask {
 
     @Override
     public void execute() {
-        //@SuppressWarnings("OptionalGetWithoutIsPresent")
-        //Map<String, Object> map = billingService.getContract(102127).stream().findFirst().get();
-        //String title = (String) map.get("title");
+        String title = null;
+//        @SuppressWarnings("OptionalGetWithoutIsPresent")
+//        var map = billingService.getContract(102127).stream().findFirst().get();
+//        title = (String) map.get("title");
 
-        log.info("The time is now {}, {}", dateFormat.format(new Date()), "title");
+        log.info("The time is now {}, {}", dateFormat.format(new Date()), title);
     }
 }
