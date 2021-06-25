@@ -6,18 +6,12 @@
 <head>
     <title>Spring - workplace</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link th:href="@{/main.css}" rel="stylesheet" media="screen" />
+    <script th:src="@{/main.js}" type="application/javascript"></script>
 </head>
 <body>
     <div class="header" layout:fragment="header">
-        <nav class="navbar navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="#">
-                    <img th:src="@{/logo.png}" alt="" style="height: 30px" class="mr-1">
-                    Spring-workplace
-                </a>
-            </div>
-        </nav>
+        <div th:replace="~{fragment/navigation :: navbar}"></div>
     </div>
     <div class="container mt-3" layout:fragment="body"></div>
 </body>
