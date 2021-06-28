@@ -1,0 +1,114 @@
+databaseChangeLog:
+  - changeSet:
+      id: '6'
+      author: asylum29 (generated)
+      changes:
+        - loadData:
+            columns:
+              - column:
+                  header: next_val
+                  name: next_val
+                  type: NUMERIC
+            commentLineStartsWith: '#'
+            encoding: UTF-8
+            file: data/hibernate_sequence.csv
+            quotchar: '"'
+            separator: ','
+            relativeToChangelogFile: true
+            tableName: hibernate_sequence
+  - changeSet:
+      id: '7'
+      author: asylum29 (generated)
+      changes:
+        - loadData:
+            columns:
+              - column:
+                  header: id
+                  name: id
+                  type: NUMERIC
+              - column:
+                  header: name
+                  name: name
+                  type: STRING
+            commentLineStartsWith: '#'
+            encoding: UTF-8
+            file: data/role.csv
+            quotchar: '"'
+            separator: ','
+            relativeToChangelogFile: true
+            tableName: role
+  - changeSet:
+      id: '8'
+      author: asylum29 (generated)
+      changes:
+        - loadData:
+            columns:
+              - column:
+                  header: id
+                  name: id
+                  type: NUMERIC
+              - column:
+                  header: active
+                  name: active
+                  type: NUMERIC
+              - column:
+                  header: name
+                  name: name
+                  type: STRING
+              - column:
+                  header: rate
+                  name: rate
+                  type: NUMERIC
+            commentLineStartsWith: '#'
+            encoding: UTF-8
+            file: data/task.csv
+            quotchar: '"'
+            separator: ','
+            relativeToChangelogFile: true
+            tableName: task
+  - changeSet:
+      id: '9'
+      author: asylum29 (generated)
+      changes:
+        - loadData:
+            columns:
+              - column:
+                  header: id
+                  name: id
+                  type: NUMERIC
+              - column:
+                  header: password
+                  name: password
+                  type: STRING
+              - column:
+                  header: username
+                  name: username
+                  type: STRING
+            commentLineStartsWith: '#'
+            encoding: UTF-8
+            file: data/user.csv
+            quotchar: '"'
+            separator: ','
+            relativeToChangelogFile: true
+            tableName: user
+  - changeSet:
+      id: '10'
+      author: asylum29 (generated)
+      changes:
+        - loadData:
+            columns:
+              - column:
+                  header: user_id
+                  name: user_id
+                  type: NUMERIC
+              - column:
+                  header: roles_id
+                  name: roles_id
+                  type: NUMERIC
+            commentLineStartsWith: '#'
+            encoding: UTF-8
+            file: data/user_roles.csv
+            quotchar: '"'
+            separator: ','
+            relativeToChangelogFile: true
+            tableName: user_roles
