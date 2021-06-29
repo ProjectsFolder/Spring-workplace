@@ -29,7 +29,7 @@ liquibase {
 			username 'root'
 			password System.env.DB_PASSWORD
 			referenceDriver 'liquibase.ext.hibernate.database.connection.HibernateDriver'
-			referenceUrl 'hibernate:spring:com.example.demo.entity?dialect=org.hibernate.dialect.MySQLDialect'
+			referenceUrl 'hibernate:spring:com.example.demo.entity?dialect=org.hibernate.dialect.MySQL5InnoDBDialect'
 		}
 	}
 }
@@ -51,6 +51,7 @@ dependencies {
 
 	liquibaseRuntime 'mysql:mysql-connector-java'
 	liquibaseRuntime 'org.springframework.boot:spring-boot-starter-data-jpa'
+	liquibaseRuntime 'org.springframework.boot:spring-boot-starter-security'
 	liquibaseRuntime 'org.yaml:snakeyaml'
 	liquibaseRuntime 'org.liquibase:liquibase-core:3.6.3'
 	//liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.1.1'
