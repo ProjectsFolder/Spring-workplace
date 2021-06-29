@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.5.1'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'org.liquibase.gradle' version '2.0.3'
 }
 
 group = 'com.example'
@@ -12,10 +13,25 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	liquibaseRuntime.extendsFrom runtime
 }
 
 repositories {
 	mavenCentral()
+}
+
+liquibase {
+	activities {
+		main {
+			changeLogFile 'src/main/resources/db/changelog/db.changelog-master-log.yaml'
+			driver 'com.mysql.cj.jdbc.Driver'
+			url 'jdbc:mysql://localhost:3306/spring_demo'
+			username 'root'
+			password System.env.DB_PASSWORD
+			referenceDriver 'liquibase.ext.hibernate.database.connection.HibernateDriver'
+			referenceUrl 'hibernate:spring:com.example.demo.entity?dialect=org.hibernate.dialect.MySQLDialect'
+		}
+	}
 }
 
 dependencies {
@@ -31,7 +47,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-	implementation 'org.liquibase:liquibase-core'
+	implementation 'org.liquibase:liquibase-core:3.6.3'
+
+	liquibaseRuntime 'mysql:mysql-connector-java'
+	liquibaseRuntime 'org.springframework.boot:spring-boot-starter-data-jpa'
+	liquibaseRuntime 'org.yaml:snakeyaml'
+	liquibaseRuntime 'org.liquibase:liquibase-core:3.6.3'
+	//liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.1.1'
+	liquibaseRuntime 'org.liquibase.ext:liquibase-hibernate5:3.6'
+	liquibaseRuntime sourceSets.main.output
 }
 
 test {
