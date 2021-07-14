@@ -21,6 +21,8 @@ public class User implements UserDetails {
   @ManyToMany(fetch = FetchType.EAGER)
   private Set<Role> roles;
 
+  private String email;
+
   public User() { }
 
   public Long getId() {
@@ -80,5 +82,13 @@ public class User implements UserDetails {
 
   public void setRoles(Set<Role> roles) {
     this.roles = roles;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 }

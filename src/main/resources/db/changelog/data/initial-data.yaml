@@ -1,23 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: '6'
-      author: asylum29 (generated)
-      changes:
-        - loadData:
-            columns:
-              - column:
-                  header: next_val
-                  name: next_val
-                  type: NUMERIC
-            commentLineStartsWith: '#'
-            encoding: UTF-8
-            file: data/hibernate_sequence.csv
-            quotchar: '"'
-            separator: ','
-            relativeToChangelogFile: true
-            tableName: hibernate_sequence
-  - changeSet:
-      id: '7'
+      id: '1'
       author: asylum29 (generated)
       changes:
         - loadData:
@@ -38,7 +21,7 @@ databaseChangeLog:
             relativeToChangelogFile: true
             tableName: role
   - changeSet:
-      id: '8'
+      id: '2'
       author: asylum29 (generated)
       changes:
         - loadData:
@@ -67,7 +50,7 @@ databaseChangeLog:
             relativeToChangelogFile: true
             tableName: task
   - changeSet:
-      id: '9'
+      id: '3'
       author: asylum29 (generated)
       changes:
         - loadData:
@@ -92,7 +75,7 @@ databaseChangeLog:
             relativeToChangelogFile: true
             tableName: user
   - changeSet:
-      id: '10'
+      id: '4'
       author: asylum29 (generated)
       changes:
         - loadData:
