@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 @Service
 public class StorageService implements StorageServiceInterface {
 
-    String uploadDirectory;
+    private final String uploadDirectory;
 
     public StorageService(@Autowired Environment environment)
     {
