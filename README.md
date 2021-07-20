@@ -7,3 +7,7 @@ build bootRun
 ```
 build clearChecksums diffChangeLog
 ```
+## Сборка frontend:
+```
+yarn build
+```
