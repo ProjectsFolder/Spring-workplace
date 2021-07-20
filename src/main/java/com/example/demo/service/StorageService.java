@@ -15,18 +15,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 @Service
 public class StorageService implements StorageServiceInterface {
 
-    @Autowired
-    Environment environment;
+    String uploadDirectory;
+
+    public StorageService(@Autowired Environment environment)
+    {
+        this.uploadDirectory = environment.getProperty("app.uploads.directory");
+    }
 
     @Override
     public void store(MultipartFile file) throws IOException {
-        var directoryPath = this.environment.getProperty("app.uploads.directory");
+        var directoryPath = this.uploadDirectory;
         if (null == directoryPath) {
             throw new IOException("Directory name is empty");
         }
@@ -47,7 +50,7 @@ public class StorageService implements StorageServiceInterface {
     @Override
     public Stream<Path> loadAll() {
         var list = new ArrayList<Path>();
-        var directoryPath = this.environment.getProperty("app.uploads.directory");
+        var directoryPath = this.uploadDirectory;
         if (null != directoryPath) {
             var directory = new File(directoryPath);
             if (null != directory.listFiles()) {
@@ -62,7 +65,7 @@ public class StorageService implements StorageServiceInterface {
 
     @Override
     public Path load(String filename) throws StorageFileNotFoundException {
-        var directoryPath = this.environment.getProperty("app.uploads.directory");
+        var directoryPath = this.uploadDirectory;
         if (null != directoryPath) {
             var file = new File(directoryPath + filename);
             if (file.exists()) {
