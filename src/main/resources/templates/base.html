@@ -1,18 +1,21 @@
 <!DOCTYPE HTML>
-<html
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 >
 <head>
     <title>Spring - workplace</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link th:href="@{/main.css}" rel="stylesheet" media="screen" />
-    <script th:src="@{/main.js}" type="application/javascript"></script>
 </head>
 <body>
     <div class="header" layout:fragment="header">
         <div th:replace="~{fragment/navigation :: navbar}"></div>
     </div>
-    <div class="container mt-3" layout:fragment="body"></div>
+    <div class="container mt-3">
+        <div th:replace="~{fragment/notification :: notification}"></div>
+        <div layout:fragment="body"></div>
+    </div>
+    <script th:src="@{/main.js}" type="application/javascript"></script>
 </body>
 </html>

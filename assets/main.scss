@@ -1,1 +1,8 @@
+@import "~bootstrap/scss/functions";
+
+$custom-file-label-content: "Обзор";
+$custom-file-text: (
+    ru: $custom-file-label-content
+) !default;
+
 @import '~bootstrap/scss/bootstrap';
