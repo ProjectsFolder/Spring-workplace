@@ -57,13 +57,16 @@ public class FileController {
             RedirectAttributes redirectAttributes
     ) {
         try {
+            if (file.isEmpty()) {
+                throw new IOException("File not found");
+            }
             storageService.store(file);
             redirectAttributes.addFlashAttribute(
                     "successMessage",
                     "You successfully uploaded <b>" + file.getOriginalFilename() + "</b>"
             );
         } catch (IOException exception) {
-            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
+            redirectAttributes.addFlashAttribute("dangerMessage", exception.getMessage());
         }
 
         return "redirect:/file/";
