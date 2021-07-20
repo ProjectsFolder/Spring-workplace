@@ -1,10 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.exception.StorageFileNotFoundException;
 import com.example.demo.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +15,10 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
+@Secured("ROLE_USER")
 @RequestMapping(path="/file", name="file")
 public class FileController {
     @Autowired
@@ -25,14 +26,13 @@ public class FileController {
 
     @GetMapping(value = "/", name = "list")
     public String list(Model model) throws IOException {
-//        var files = storageService.loadAll().map(
-//                path ->
-//                        MvcUriComponentsBuilder.fromMethodName(FileController.class, "serve", path.getFileName().toString())
-//                                .build()
-//                                .toUri()
-//                                .toString()
-//        ).collect(Collectors.toList());
-        List<String> files = new ArrayList<>();
+        var files = storageService.loadAll().map(
+                path ->
+                        MvcUriComponentsBuilder.fromMethodName(FileController.class, "serve", path.getFileName().toString())
+                                .build()
+                                .toUri()
+                                .toString()
+        ).collect(Collectors.toList());
 
         model.addAttribute("files", files);
 
@@ -40,7 +40,9 @@ public class FileController {
     }
 
     @GetMapping(value = "/{filename:.+}", name = "serve")
-    public @ResponseBody ResponseEntity<Resource> serve(@PathVariable String filename) {
+    public @ResponseBody ResponseEntity<Resource> serve(@PathVariable String filename)
+            throws StorageFileNotFoundException
+    {
         Resource file = storageService.loadAsResource(filename);
 
         return ResponseEntity.ok().header(
@@ -54,17 +56,21 @@ public class FileController {
             @RequestParam("file") MultipartFile file,
             RedirectAttributes redirectAttributes
     ) {
-        storageService.store(file);
-        redirectAttributes.addFlashAttribute(
-                "successMessage",
-                "You successfully uploaded " + file.getOriginalFilename() + "!"
-        );
+        try {
+            storageService.store(file);
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    "You successfully uploaded <b>" + file.getOriginalFilename() + "</b>"
+            );
+        } catch (IOException exception) {
+            redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
+        }
 
         return "redirect:/file/";
     }
 
-//    @ExceptionHandler(StorageFileNotFoundException.class)
-//    public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
-//        return ResponseEntity.notFound().build();
-//    }
+    @ExceptionHandler(StorageFileNotFoundException.class)
+    public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exception) {
+        return ResponseEntity.notFound().build();
+    }
 }

@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 node_modules/
 src/main/resources/build
+/uploads
 
 ### STS ###
 .apt_generated

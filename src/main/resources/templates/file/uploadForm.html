@@ -6,31 +6,36 @@
 >
 <body>
 <div layout:fragment="body">
-    <div>
-        <h4>File uploading</h4>
-        <form th:action="${#mvc.url('file#upload').build()}" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label>
-                    File to upload
-                    <div class="custom-file">
-                        <input class="custom-file-input" type="file" name="file" />
-                        <label class="custom-file-label"></label>
-                    </div>
-                </label>
-            </div>
+    <div class="row">
+        <div class="col">
+            <h4>File uploading</h4>
+            <form th:action="${#mvc.url('file#upload').build()}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>
+                        File to upload
+                        <div class="custom-file">
+                            <input class="custom-file-input" type="file" name="file" />
+                            <label class="custom-file-label"></label>
+                        </div>
+                    </label>
+                </div>
 
-            <div>
-                <input class="btn btn-primary" type="submit" value="Upload"/>
+                <div>
+                    <input class="btn btn-primary" type="submit" value="Upload"/>
+                </div>
+            </form>
+        </div>
+        <div class="col">
+            <h4>List of files</h4>
+            <ul th:if="${0 != files.size()}">
+                <li th:each="file : ${files}">
+                    <a th:href="${file}" th:utext="${file}" />
+                </li>
+            </ul>
+            <div th:if="${0 == files.size()}">
+                Not found
             </div>
-        </form>
-    </div>
-
-    <div>
-        <ul>
-            <li th:each="file : ${files}">
-                <a th:href="${file}" th:text="${file}" />
-            </li>
-        </ul>
+        </div>
     </div>
 </div>
 </body>
