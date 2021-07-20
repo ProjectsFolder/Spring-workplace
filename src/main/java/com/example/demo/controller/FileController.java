@@ -43,7 +43,7 @@ public class FileController {
     public @ResponseBody ResponseEntity<Resource> serve(@PathVariable String filename)
             throws StorageFileNotFoundException
     {
-        Resource file = storageService.loadAsResource(filename);
+        var file = storageService.loadAsResource(filename);
 
         return ResponseEntity.ok().header(
                 HttpHeaders.CONTENT_DISPOSITION,
