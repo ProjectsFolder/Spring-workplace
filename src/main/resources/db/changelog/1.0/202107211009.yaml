@@ -1,0 +1,56 @@
+databaseChangeLog:
+- changeSet:
+    id: 1626836835327-1
+    author: asylum29 (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: datetime
+        columnName: created_at
+        tableName: file
+        validate: true
+- changeSet:
+    id: 1626836835327-2
+    author: asylum29 (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: extension
+        tableName: file
+        validate: true
+- changeSet:
+    id: 1626836835327-3
+    author: asylum29 (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: hash
+        tableName: file
+        validate: true
+- changeSet:
+    id: 1626836835327-4
+    author: asylum29 (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: mime_type
+        tableName: file
+        validate: true
+- changeSet:
+    id: 1626836835327-5
+    author: asylum29 (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: bigint
+        columnName: size
+        tableName: file
+        validate: true
+- changeSet:
+    id: 1626836835327-6
+    author: asylum29 (generated)
+    changes:
+    - addNotNullConstraint:
+        columnDataType: varchar(255)
+        columnName: thread
+        tableName: file
+        validate: true
+

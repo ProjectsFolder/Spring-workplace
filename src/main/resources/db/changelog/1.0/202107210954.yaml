@@ -1,0 +1,51 @@
+databaseChangeLog:
+- changeSet:
+    id: 1626836015852-1
+    author: asylum29 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: filePK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_at
+            type: datetime
+        - column:
+            name: extension
+            type: VARCHAR(255)
+        - column:
+            name: hash
+            type: VARCHAR(255)
+        - column:
+            name: mime_type
+            type: VARCHAR(255)
+        - column:
+            name: size
+            type: BIGINT
+        - column:
+            name: thread
+            type: VARCHAR(255)
+        - column:
+            name: user_id
+            type: BIGINT
+        tableName: file
+- changeSet:
+    id: 1626836015852-2
+    author: asylum29 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_id
+        baseTableName: file
+        constraintName: FKinph5hu8ryc97hbs75ym9sm7t
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: user
+        validate: true
+

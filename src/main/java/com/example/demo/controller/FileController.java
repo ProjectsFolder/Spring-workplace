@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.exception.StorageFileNotFoundException;
 import com.example.demo.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -11,44 +12,41 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 @Controller
 @Secured("ROLE_USER")
 @RequestMapping(path="/file", name="file")
 public class FileController {
+    private static final String FILE_THREAD = "global";
+
     @Autowired
     private StorageService storageService;
 
     @GetMapping(value = "/", name = "list")
     public String list(Model model) throws IOException {
-        var files = storageService.loadAll().map(
-                path ->
-                        MvcUriComponentsBuilder.fromMethodName(FileController.class, "serve", path.getFileName().toString())
-                                .build()
-                                .toUri()
-                                .toString()
-        ).collect(Collectors.toList());
-
-        model.addAttribute("files", files);
+        model.addAttribute("files", storageService.loadAll());
 
         return "file/uploadForm";
     }
 
-    @GetMapping(value = "/{filename:.+}", name = "serve")
-    public @ResponseBody ResponseEntity<Resource> serve(@PathVariable String filename)
-            throws StorageFileNotFoundException
-    {
-        var file = storageService.loadAsResource(filename);
+    @GetMapping(value = "/{id}", name = "serve")
+    public @ResponseBody ResponseEntity<Resource> serve(@PathVariable String id)
+            throws StorageFileNotFoundException {
 
-        return ResponseEntity.ok().header(
-                HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\""
-        ).body(file);
+        var storedFile = storageService.load(id);
+        var file = new File(storedFile.getFilePath());
+        if (file.exists()) {
+            return ResponseEntity.ok().header(
+                    HttpHeaders.CONTENT_DISPOSITION,
+                    "attachment; filename=\"" + storedFile.getFileName() + "\""
+            ).body(new FileSystemResource(file));
+        }
+
+        throw new StorageFileNotFoundException();
     }
 
     @PostMapping(value = "/", name = "upload")
@@ -60,7 +58,7 @@ public class FileController {
             if (file.isEmpty()) {
                 throw new IOException("File not found");
             }
-            storageService.store(file);
+            storageService.store(FILE_THREAD, file);
             redirectAttributes.addFlashAttribute(
                     "successMessage",
                     "You successfully uploaded <b>" + file.getOriginalFilename() + "</b>"

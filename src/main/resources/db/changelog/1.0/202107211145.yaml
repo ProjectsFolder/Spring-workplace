@@ -1,0 +1,14 @@
+databaseChangeLog:
+- changeSet:
+    id: 1626842702491-1
+    author: asylum29 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: file_name
+            type: varchar(255)
+        tableName: file
+

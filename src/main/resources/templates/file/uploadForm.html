@@ -29,7 +29,7 @@
             <h4>List of files</h4>
             <ul th:if="${0 != files.size()}">
                 <li th:each="file : ${files}">
-                    <a th:href="${file}" th:utext="${file}" />
+                    <a th:href="${#mvc.url('file#serve').arg(0, file.identifier).build()}" th:utext="${file.fileName}"/>
                 </li>
             </ul>
             <div th:if="${0 == files.size()}">
