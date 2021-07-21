@@ -8,17 +8,13 @@ import com.example.demo.service.interfaces.StorageServiceInterface;
 import com.example.demo.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -103,6 +99,24 @@ public class StorageService implements StorageServiceInterface {
         var storedFile = fileRepository.findById(Long.parseLong(identifier));
         if (storedFile.isPresent()) {
             return storedFile.get();
+        }
+
+        throw new StorageFileNotFoundException();
+    }
+
+    @Override
+    public void delete(String identifier) throws StorageFileNotFoundException {
+        var storedFile = fileRepository.findById(Long.parseLong(identifier));
+        if (storedFile.isPresent()) {
+            var file = storedFile.get();
+            var diskFile = new File(file.getFilePath());
+            if (diskFile.exists()) {
+                //noinspection ResultOfMethodCallIgnored
+                diskFile.delete();
+            }
+            fileRepository.delete(file);
+
+            return;
         }
 
         throw new StorageFileNotFoundException();

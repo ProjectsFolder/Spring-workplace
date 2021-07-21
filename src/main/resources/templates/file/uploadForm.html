@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col">
             <h4>File uploading</h4>
-            <form th:action="${#mvc.url('file#upload').build()}" method="post" enctype="multipart/form-data">
+            <form th:action="${#mvc.url('file#upload').build()}" th:method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>
                         File to upload
@@ -29,7 +29,16 @@
             <h4>List of files</h4>
             <ul th:if="${0 != files.size()}">
                 <li th:each="file : ${files}">
-                    <a th:href="${#mvc.url('file#serve').arg(0, file.identifier).build()}" th:utext="${file.fileName}"/>
+                    <div class="row no-gutters">
+                        <div class="col-auto">
+                            <a th:href="${#mvc.url('file#serve').arg(0, file.identifier).build()}" th:utext="${file.fileName}"/>
+                        </div>
+                        <div class="col">
+                            <form th:action="${#mvc.url('file#delete').arg(0, file.identifier).build()}" th:method="delete">
+                                <input class="btn btn-sm btn-danger px-1 py-0 ml-2" type="submit" value="Delete"/>
+                            </form>
+                        </div>
+                    </div>
                 </li>
             </ul>
             <div th:if="${0 == files.size()}">
