@@ -35,6 +35,12 @@
                     <div class="row no-gutters">
                         <div class="col-auto">
                             <a th:href="${#mvc.url('file#serve').arg(0, file.identifier).build()}" th:utext="${file.fileName}"/>
+                            <small class="text-secondary" th:if="${file.creator != null}">
+                                (creator: [[${file.creator.username}]], created at: [[${#dates.format(file.createdAt, 'dd.MM.yyyy HH:mm')}]])
+                            </small>
+                            <small class="text-secondary" th:if="${file.creator == null}">
+                                (created at: [[${#dates.format(file.createdAt, 'dd.MM.yyyy HH:mm')}]])
+                            </small>
                         </div>
                         <div class="col">
                             <form th:action="${#mvc.url('file#delete').arg(0, file.identifier).build()}" th:method="delete">

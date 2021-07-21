@@ -1,5 +1,9 @@
 package com.example.demo.entity.interfaces;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Date;
+
 public interface FileInterface {
 
     String getFileName();
@@ -13,5 +17,9 @@ public interface FileInterface {
     String getExtension();
 
     String getIdentifier();
+
+    Date getCreatedAt();
+
+    UserDetails getCreator();
 
 }

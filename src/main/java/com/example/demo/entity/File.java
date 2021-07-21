@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import com.example.demo.entity.interfaces.FileInterface;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -63,6 +64,7 @@ public class File implements FileInterface {
         this.thread = thread;
     }
 
+    @Override
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -104,6 +106,11 @@ public class File implements FileInterface {
 
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
+    }
+
+    @Override
+    public UserDetails getCreator() {
+        return user;
     }
 
     public User getUser() {
