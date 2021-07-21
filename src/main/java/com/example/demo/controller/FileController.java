@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.FileDto;
 import com.example.demo.exception.StorageFileNotFoundException;
 import com.example.demo.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
@@ -27,8 +29,9 @@ public class FileController {
     private StorageService storageService;
 
     @GetMapping(value = "/", name = "list")
-    public String list(Model model) throws IOException {
+    public String list(Model model) {
         model.addAttribute("files", storageService.loadAll());
+        model.addAttribute("fileForm", new FileDto());
 
         return "file/uploadForm";
     }
@@ -51,13 +54,19 @@ public class FileController {
 
     @PostMapping(value = "/", name = "upload")
     public String upload(
-            @RequestParam("file") MultipartFile file,
-            RedirectAttributes redirectAttributes
+            @ModelAttribute("fileForm") @Validated FileDto fileForm,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes,
+            Model model
     ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("files", storageService.loadAll());
+
+            return "file/uploadForm";
+        }
+
+        var file = fileForm.getFile();
         try {
-            if (file.isEmpty()) {
-                throw new IOException("File not found");
-            }
             storageService.store(FILE_THREAD, file);
             redirectAttributes.addFlashAttribute(
                     "successMessage",

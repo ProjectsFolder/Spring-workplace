@@ -9,14 +9,17 @@
     <div class="row">
         <div class="col">
             <h4>File uploading</h4>
-            <form th:action="${#mvc.url('file#upload').build()}" th:method="post" enctype="multipart/form-data">
+            <form th:action="${#mvc.url('file#upload').build()}" th:object="${fileForm}" th:method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>
                         File to upload
                         <div class="custom-file">
-                            <input class="custom-file-input" type="file" name="file" />
+                            <input class="custom-file-input" type="file" th:field="*{file}" />
                             <label class="custom-file-label"></label>
                         </div>
+                        <p class="text-danger mb-0" th:each="error : ${#fields.errors('file')}" th:text="${error}">
+                            Validation error
+                        </p>
                     </label>
                 </div>
 
