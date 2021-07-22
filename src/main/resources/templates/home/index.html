@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{base}"
+>
+<body>
+    <div layout:fragment="body">
+        <div class="h3">Hello, Spring MVC!</div>
+        <div th:text="${@testUtils.reverseString('hello')}"></div>
+    </div>
+</body>
+</html>
