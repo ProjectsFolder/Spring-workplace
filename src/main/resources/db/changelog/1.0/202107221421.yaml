@@ -1,0 +1,25 @@
+databaseChangeLog:
+- changeSet:
+    id: 1626938443460-1
+    author: asylum29 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: parent_id
+            type: bigint
+        tableName: role
+- changeSet:
+    id: 1626938443460-2
+    author: asylum29 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: parent_id
+        baseTableName: role
+        constraintName: FK6hsvg1pv1u6yf8bndd6cfrdnv
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: role
+        validate: true
+

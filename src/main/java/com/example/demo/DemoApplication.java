@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import java.util.Arrays;
 
 @SpringBootApplication
-@EnableGlobalMethodSecurity(securedEnabled = true)
 public class DemoApplication {
 
 	public static void main(String[] args) {

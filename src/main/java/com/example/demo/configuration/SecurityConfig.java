@@ -86,7 +86,7 @@ public class SecurityConfig {
                         .and()
                     .logout()
                         .permitAll()
-                        .logoutSuccessUrl("/");
+                        .logoutSuccessUrl("/login");
         }
     }
 }

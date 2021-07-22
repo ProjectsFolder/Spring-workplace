@@ -17,6 +17,9 @@ public class Role implements GrantedAuthority {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Role parent;
+
     public Role() { }
 
     public Role(Long id) {
@@ -55,5 +58,13 @@ public class Role implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return getName();
+    }
+
+    public Role getParent() {
+        return parent;
+    }
+
+    public void setParent(Role parent) {
+        this.parent = parent;
     }
 }
