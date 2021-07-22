@@ -1,57 +1,92 @@
 package com.example.demo.configuration;
 
+import com.example.demo.security.ApiTokenFilter;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-@Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .csrf()
-                .disable()
-                .authorizeRequests()
-                //Доступ только для не зарегистрированных пользователей
-                .antMatchers("/user/registration", "/login").not().fullyAuthenticated()
-                //Доступ только для пользователей с ролью Администратор
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                //Доступ разрешен всем пользователей
-                .antMatchers("/", "/resources/**").permitAll()
-                //Все остальные страницы требуют аутентификации
-                //.anyRequest().authenticated()
-
-                .and()
-                //Настройка для входа в систему
-                .formLogin()
-                .loginPage("/login")
-                //Перенарпавление на главную страницу после успешного входа
-                .defaultSuccessUrl("/")
-                //.permitAll()
-
-                .and()
-                .logout()
-                .permitAll()
-                .logoutSuccessUrl("/");
-    }
-
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
+    }
+
+    @Order(1)
+    @Configuration
+    public static class ApiWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+        @Autowired
+        private ApiTokenFilter apiTokenFilter;
+
+        @Override
+        protected void configure(HttpSecurity httpSecurity) throws Exception {
+            httpSecurity
+                    .csrf().disable()
+                    //Фильтр только для запросов API
+                    .antMatcher("/api/**")
+                    //Правила авторизации
+                    .authorizeRequests()
+                        //Все запросы требуют аутентификации
+                        .anyRequest().authenticated()
+                        .and()
+                    //Фильтр авторизации по токену
+                    .addFilterBefore(apiTokenFilter, BasicAuthenticationFilter.class)
+                    //Отключение сохранения состояния сеанса
+                    .sessionManagement()
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    //Настройка обработки ошибок
+                    .exceptionHandling()
+                        .authenticationEntryPoint(new Http403ForbiddenEntryPoint());
+        }
+    }
+
+    @Order(2)
+    @Configuration
+    public static class FormLoginWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure(HttpSecurity httpSecurity) throws Exception {
+            httpSecurity
+                    .csrf().disable()
+                    //Правила авторизации
+                    .authorizeRequests()
+                        //Доступ только для не зарегистрированных пользователей
+                        .antMatchers("/user/registration", "/login").not().fullyAuthenticated()
+                        //Доступ только для пользователей с ролью Администратор
+                        .antMatchers("/admin/**").hasRole("ADMIN")
+                        //Доступ разрешен всем пользователей
+                        .antMatchers("/", "/resources/**").permitAll()
+                        //Все остальные страницы требуют аутентификации
+                        //.anyRequest().authenticated()
+                    .and()
+                    //Настройка для входа в систему
+                    .formLogin()
+                        .loginPage("/login")
+                        //Перенарпавление на главную страницу после успешного входа
+                        .defaultSuccessUrl("/")
+                        //.permitAll()
+                        .and()
+                    .logout()
+                        .permitAll()
+                        .logoutSuccessUrl("/");
+        }
     }
 }
