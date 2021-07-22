@@ -26,8 +26,9 @@ class MethodSecurityConfiguration extends GlobalMethodSecurityConfiguration {
 
     @Bean
     public RoleHierarchy roleHierarchy() {
-        var arrayHierarchy = new ArrayList<String>();
-        for (var role: roleRepository.findAll()) {
+        var roles = roleRepository.findAll();
+        var arrayHierarchy = new ArrayList<String>(roles.size());
+        for (var role: roles) {
             var parent = role.getParent();
             if (null != parent) {
                 arrayHierarchy.add(parent.getName() + " > " + role.getName());
