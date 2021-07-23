@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -8,13 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(path = "/api", name = "api")
 public class ApiController {
 
-    @Secured("ROLE_ADMIN")
+    //@Secured("ROLE_ADMIN")
     @GetMapping(path = "/admin", name = "admin")
     public String getAdmin() {
         return "Hi admin";
     }
 
-    @Secured("ROLE_USER")
+    //@Secured("ROLE_USER")
     @GetMapping(path = "/user", name = "user")
     public String getUser() {
         return "Hi user";

@@ -43,10 +43,10 @@ public class SecurityConfig {
                     //Фильтр только для запросов API
                     .antMatcher("/api/**")
                     //Правила авторизации
-                    .authorizeRequests()
-                        //Все запросы требуют аутентификации
-                        .anyRequest().authenticated()
-                        .and()
+//                    .authorizeRequests()
+//                        //Все запросы требуют аутентификации
+//                        .anyRequest().authenticated()
+//                        .and()
                     //Фильтр авторизации по токену
                     .addFilterBefore(apiTokenFilter, BasicAuthenticationFilter.class)
                     //Отключение сохранения состояния сеанса
