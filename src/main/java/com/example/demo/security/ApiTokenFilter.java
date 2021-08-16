@@ -1,7 +1,5 @@
 package com.example.demo.security;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -11,11 +9,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
 public class ApiTokenFilter extends GenericFilterBean {
+    private final String token;
 
-    @Value("${app.api.token}")
-    private String token;
+    public ApiTokenFilter(String token) {
+        this.token = token;
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

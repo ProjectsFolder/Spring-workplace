@@ -3,6 +3,7 @@ package com.example.demo.configuration;
 import com.example.demo.security.ApiTokenFilter;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -33,8 +34,8 @@ public class SecurityConfig {
     @Order(1)
     @Configuration
     public static class ApiWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-        @Autowired
-        private ApiTokenFilter apiTokenFilter;
+        @Value("${app.api.token}")
+        private String token;
 
         @Override
         protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -48,7 +49,7 @@ public class SecurityConfig {
 //                        .anyRequest().authenticated()
 //                        .and()
                     //Фильтр авторизации по токену
-                    .addFilterBefore(apiTokenFilter, BasicAuthenticationFilter.class)
+                    .addFilterBefore(new ApiTokenFilter(token), BasicAuthenticationFilter.class)
                     //Отключение сохранения состояния сеанса
                     .sessionManagement()
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
