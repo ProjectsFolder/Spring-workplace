@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ApiTokenFilter extends GenericFilterBean {
+
     private final String token;
 
     public ApiTokenFilter(String token) {
