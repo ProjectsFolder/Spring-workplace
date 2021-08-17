@@ -7,6 +7,24 @@
 <body>
 <div layout:fragment="body">
     <h4>Web socket</h4>
+    <div class="mb-2">Messages:</div>
+    <div class="web-socket-content"></div>
 </div>
+<th:block layout:fragment="javascripts">
+    <script type="application/javascript">
+        $(document).ready(function () {
+            let content = $('.web-socket-content');
+            let socket = new SockJS('/ws');
+            let stompClient = Stomp.over(socket);
+            stompClient.connect({}, function(frame) {
+                stompClient.subscribe('/broker/messages', function(message) {
+                    let data = JSON.parse(message.body);
+                    content.append(`<div class="card px-2 mb-1">${data.text}</div>`);
+                });
+                stompClient.send('/app/test', {}, JSON.stringify({ 'text': 'Hello, WS!' }));
+            });
+        });
+    </script>
+</th:block>
 </body>
 </html>
