@@ -11,7 +11,7 @@
         <div class="col">
             <form>
                 <div class="form-group">
-                    <label for="form-user-select">Select to</label>
+                    <label for="form-user-select">Send to</label>
                     <select class="form-control" id="form-user-select">
                         <th:block th:each="user : ${users}">
                             <option th:value="${user.id}">[[${user.username}]]</option>
