@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
-class MethodSecurityConfiguration extends GlobalMethodSecurityConfiguration {
+class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
     @Autowired
     private RoleRepository roleRepository;

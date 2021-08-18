@@ -35,6 +35,6 @@ public class TestTask extends AbstractTask {
 
         var message = new MessageDto();
         message.setText(String.format("%s: %s", this.getClass().getName(), time));
-        simpMessagingTemplate.convertAndSend("/broker/messages", message);
+        simpMessagingTemplate.convertAndSend("/task/messages", message);
     }
 }
