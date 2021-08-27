@@ -22,7 +22,7 @@ public class ApiController {
     @GetMapping(path = "/admin", name = "admin")
     public ApiSuccessResponse getAdmin() {
         return new ApiSuccessResponse(Map.of(
-            "message","Hi, admin"
+            "message", "Hi, admin"
         ));
     }
 
@@ -30,7 +30,7 @@ public class ApiController {
     @GetMapping(path = "/user", name = "user")
     public ApiSuccessResponse getUser() {
         return new ApiSuccessResponse(Map.of(
-            "message","Hi, user"
+            "message", "Hi, user"
         ));
     }
 
