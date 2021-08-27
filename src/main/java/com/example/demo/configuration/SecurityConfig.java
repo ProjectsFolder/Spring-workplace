@@ -1,5 +1,7 @@
 package com.example.demo.configuration;
 
+import com.example.demo.security.ApiAccessDeniedHandler;
+import com.example.demo.security.ApiAuthenticationEntryPoint;
 import com.example.demo.security.ApiTokenFilter;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
@@ -48,15 +49,18 @@ public class SecurityConfig {
 //                        //Все запросы требуют аутентификации
 //                        .anyRequest().authenticated()
 //                        .and()
-                    //Фильтр авторизации по токену
-                    .addFilterBefore(new ApiTokenFilter(token), BasicAuthenticationFilter.class)
                     //Отключение сохранения состояния сеанса
                     .sessionManagement()
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                     //Настройка обработки ошибок
                     .exceptionHandling()
-                        .authenticationEntryPoint(new Http403ForbiddenEntryPoint());
+                        .accessDeniedHandler(new ApiAccessDeniedHandler())
+                        .authenticationEntryPoint(new ApiAuthenticationEntryPoint())
+                    .and()
+                        //.authenticationEntryPoint(new Http403ForbiddenEntryPoint());
+                    //Фильтр авторизации по токену
+                    .addFilterBefore(new ApiTokenFilter(token), BasicAuthenticationFilter.class);
         }
     }
 

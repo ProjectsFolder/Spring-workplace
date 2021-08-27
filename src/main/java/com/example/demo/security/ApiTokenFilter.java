@@ -1,12 +1,12 @@
 package com.example.demo.security;
 
+import com.example.demo.classes.ApiErrorResponse;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ApiTokenFilter extends GenericFilterBean {
@@ -19,10 +19,10 @@ public class ApiTokenFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        var res = (HttpServletResponse) response;
         var token = request.getParameter("token");
         if (!this.token.equals(token)) {
-            res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token.");
+            response.setContentType("application/json");
+            (new ApiErrorResponse("Invalid token.")).toOutput(response.getOutputStream());
 
             return;
         }
