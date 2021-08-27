@@ -16,34 +16,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class BillingService extends WebRequest {
+public class SmsService extends WebRequest {
 
-    private final String username;
-    private final String password;
+    public static final String AUTH_CHANNEL = "auth";
+
+    private final String key;
     private final String url;
 
-    public BillingService(@Autowired Environment environment)
+    public SmsService(@Autowired Environment environment)
     {
-        this.username = environment.getProperty("billing.username");
-        this.password = environment.getProperty("billing.password");
-        this.url = environment.getProperty("billing.url");
+        this.key = environment.getProperty("sms.key");
+        this.url = environment.getProperty("sms.url");
     }
 
-    public ArrayList<Map<String, Object>> getContract(int id) {
+    public ArrayList<Map<String, Object>> send(String phone, String message, String channel) {
         var params = new HashMap<String, String>();
-        params.put("module", "v2.contract");
-        params.put("action", "GetDetailedById");
-        params.put("id", String.valueOf(id));
+        params.put("phone", phone);
+        params.put("message", message);
+        params.put("channel", channel);
 
-        return this.sendRequest(params);
+        return this.sendRequest("send_message", params);
     }
 
-    private ArrayList<Map<String, Object>> sendRequest(Map<String, String> params) {
-        params.put("user", this.username);
-        params.put("pswd", this.password);
-        params.put("ct", "json");
+    @SuppressWarnings("SameParameterValue")
+    private ArrayList<Map<String, Object>> sendRequest(String action, Map<String, String> params) {
+        params.put("api_key", this.key);
 
-        var builder = UriComponentsBuilder.fromHttpUrl(this.url);
+        var builder = UriComponentsBuilder.fromHttpUrl(this.url + "/" + action);
         for (var entry : params.entrySet()) {
             builder.queryParam(entry.getKey(), entry.getValue());
         }
