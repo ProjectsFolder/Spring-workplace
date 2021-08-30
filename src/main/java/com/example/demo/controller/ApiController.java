@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
@@ -34,9 +35,9 @@ public class ApiController {
         ));
     }
 
-    @GetMapping(path = "/sms", name = "sms")
-    public ApiSuccessResponse sendSms() {
-        smsService.send("71111111111", "Тест test", SmsService.AUTH_CHANNEL);
+    @GetMapping(path = "/sms/{phone}", name = "sms")
+    public ApiSuccessResponse sendSms(@PathVariable String phone) {
+        smsService.send(phone, "Тест test", SmsService.AUTH_CHANNEL);
 
         return new ApiSuccessResponse();
     }
