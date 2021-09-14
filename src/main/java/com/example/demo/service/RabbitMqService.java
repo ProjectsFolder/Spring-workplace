@@ -6,9 +6,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RabbitService {
+public class RabbitMqService {
 
-    private static final Logger log = LoggerFactory.getLogger(RabbitService.class);
+    private static final Logger log = LoggerFactory.getLogger(RabbitMqService.class);
 
     @RabbitListener(queues = "#{queue.name}")
     public void receive(String in) throws InterruptedException {
