@@ -4,6 +4,7 @@ import com.example.demo.dto.MessageDto;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -25,9 +26,14 @@ public class WebSocketController {
     SimpMessagingTemplate simpMessagingTemplate;
 
     @GetMapping(value = "/", name = "index")
-    public String index(Model model, Authentication authentication) {
+    public String index(
+        Model model,
+        Authentication authentication,
+        @Value("${app.api.token}") String token
+    ) {
         model.addAttribute("currentUser", userRepository.findByUsername(authentication.getName()));
         model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("token", token);
 
         return "socket/index";
     }

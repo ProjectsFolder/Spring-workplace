@@ -37,7 +37,7 @@
             let content = $('.web-socket-content');
             let socket = new SockJS('/ws');
             let stompClient = Stomp.over(socket);
-            stompClient.connect({ 'token': 'test' }, function(frame) {
+            stompClient.connect({ 'token': '[[${token}]]' }, function(frame) {
                 stompClient.subscribe('/task/messages', function(message) {
                     let data = JSON.parse(message.body);
                     content.append(`<div class="card px-2 mb-1">${data.text}</div>`);
