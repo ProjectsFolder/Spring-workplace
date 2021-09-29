@@ -76,7 +76,7 @@ public class SecurityConfig {
         @Autowired
         public void configureGlobal(AuthenticationManagerBuilder auth)
         {
-            KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+            var keycloakAuthenticationProvider = keycloakAuthenticationProvider();
             keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
             auth.authenticationProvider(keycloakAuthenticationProvider);
         }
