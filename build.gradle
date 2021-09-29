@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.1'
+	id 'org.springframework.boot' version '2.4.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id 'org.liquibase.gradle' version '2.0.3'
@@ -37,7 +37,7 @@ liquibase {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security:'
 	implementation 'org.springframework.security:spring-security-messaging'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
@@ -55,6 +55,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework:spring-messaging'
 	implementation 'org.springframework.amqp:spring-rabbit'
+	implementation 'org.keycloak:keycloak-spring-boot-starter'
 
 	liquibaseRuntime 'mysql:mysql-connector-java'
 	liquibaseRuntime 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -65,6 +66,13 @@ dependencies {
 	liquibaseRuntime 'org.liquibase.ext:liquibase-hibernate5:4.3.5'
 	liquibaseRuntime sourceSets.main.output
 	liquibaseRuntime 'org.springframework.amqp:spring-rabbit'
+	liquibaseRuntime 'org.keycloak:keycloak-spring-boot-starter'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.keycloak.bom:keycloak-adapter-bom:11.0.2"
+	}
 }
 
 test {

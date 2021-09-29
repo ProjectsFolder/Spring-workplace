@@ -9,6 +9,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +32,12 @@ public class WebSocketController {
         Authentication authentication,
         @Value("${app.api.token}") String token
     ) {
-        model.addAttribute("currentUser", userRepository.findByUsername(authentication.getName()));
+        var userId = 0L;
+        if (authentication instanceof UsernamePasswordAuthenticationToken) {
+            userId = userRepository.findByUsername(authentication.getName()).getId();
+        }
+
+        model.addAttribute("currentUserId", userId);
         model.addAttribute("users", userRepository.findAll());
         model.addAttribute("token", token);
 

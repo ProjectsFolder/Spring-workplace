@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{base}"
+>
+<body>
+<div layout:fragment="body">
+    <h4>Keycloak</h4>
+    <div>
+        Hello, [[${currentUser}]]!
+    </div>
+</div>
+</body>
+</html>

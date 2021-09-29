@@ -4,6 +4,9 @@ import com.example.demo.security.ApiAccessDeniedHandler;
 import com.example.demo.security.ApiAuthenticationEntryPoint;
 import com.example.demo.security.ApiTokenFilter;
 import com.example.demo.service.UserService;
+import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
+import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +17,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
@@ -65,6 +71,45 @@ public class SecurityConfig {
     }
 
     @Order(2)
+    @Configuration
+    public static class KeycloakWebSecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
+        @Autowired
+        public void configureGlobal(AuthenticationManagerBuilder auth)
+        {
+            KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+            keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
+            auth.authenticationProvider(keycloakAuthenticationProvider);
+        }
+
+        @Override
+        protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+            return new NullAuthenticatedSessionStrategy();
+        }
+
+        @Override
+        protected void configure(HttpSecurity httpSecurity) throws Exception
+        {
+            super.configure(httpSecurity);
+            httpSecurity
+                    .csrf().disable()
+                    .requestMatchers((requestMatchers) ->
+                            requestMatchers
+                                    .antMatchers("/keycloak/**", "/sso/login")
+                    )
+                    .authorizeRequests()
+                            .antMatchers("/sso/login").permitAll()
+                            .anyRequest().fullyAuthenticated()
+            ;
+        }
+
+        @Bean
+        public KeycloakSpringBootConfigResolver keycloakSpringBootConfigResolver()
+        {
+            return new KeycloakSpringBootConfigResolver();
+        }
+    }
+
+    @Order(3)
     @Configuration
     public static class FormLoginWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Override

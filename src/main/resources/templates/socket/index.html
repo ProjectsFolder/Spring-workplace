@@ -13,6 +13,7 @@
                 <div class="form-group">
                     <label for="form-user-select">Send to</label>
                     <select class="form-control" id="form-user-select">
+                        <option value="0">external user</option>
                         <th:block th:each="user : ${users}">
                             <option th:value="${user.id}">[[${user.username}]]</option>
                         </th:block>
@@ -44,7 +45,7 @@
                 });
                 stompClient.send('/app/test', {}, JSON.stringify({ 'text': 'Hello, WS!' }));
 
-                stompClient.subscribe(`/user/[[${currentUser.id}]]/messages`, function(message) {
+                stompClient.subscribe(`/user/[[${currentUserId}]]/messages`, function(message) {
                     let data = JSON.parse(message.body);
                     content.append(`<div class="card px-2 mb-1">${data.text}</div>`);
                 });
