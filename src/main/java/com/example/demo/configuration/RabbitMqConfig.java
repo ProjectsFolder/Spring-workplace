@@ -25,16 +25,16 @@ public class RabbitMqConfig {
     @Bean
     public Queue queue() {
         var naming = new UUIDNamingStrategy();
-        return new Queue(naming.generateName(), true, true, true);
+        return new Queue(naming.generateName(), true, false, true);
     }
 
     @Bean
-    FanoutExchange exchange() {
-        return new FanoutExchange("test_topic.v1", false, false);
+    TopicExchange exchange() {
+        return new TopicExchange("test_topic.v1", false, false);
     }
 
     @Bean
-    Binding binding(Queue queue, FanoutExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange);
+    Binding binding(Queue queue, TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("routing");
     }
 }
